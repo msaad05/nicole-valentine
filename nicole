@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Nicole ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at center, #ff5f8f, #8a2be2);
+    color: white;
+    text-align: center;
+}
+
+#intro {
+    position: absolute;
+    width: 100%;
+    top: 40%;
+    font-size: 2.5em;
+    animation: fadeIn 3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+#main {
+    display: none;
+    position: absolute;
+    width: 100%;
+    top: 35%;
+}
+
+button {
+    font-size: 20px;
+    padding: 15px 35px;
+    margin: 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#yes {
+    background: white;
+    color: #ff2e63;
+}
+
+#no {
+    background: #ff2e63;
+    color: white;
+    position: relative;
+}
+
+#final {
+    display: none;
+    font-size: 2em;
+    margin-top: 20px;
+}
+
+.heart {
+    position: absolute;
+    font-size: 22px;
+    animation: floatUp linear forwards;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(0); opacity: 1; }
+    to { transform: translateY(-100vh); opacity: 0; }
+}
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro">Nicole... I have something important to ask you ❤️</div>
+
+<div id="main">
+    <h1 id="question">Nicole, will you be my Valentine? 💖</h1>
+    <button id="yes">Yes ❤️</button>
+    <button id="no">No 💔</button>
+    <div id="final">Nicole, you just made this the most unforgettable moment ever ✨❤️</div>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<script>
+setTimeout(() => {
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("main").style.display = "block";
+}, 3500);
+
+let yes = document.getElementById("yes");
+let no = document.getElementById("no");
+let final = document.getElementById("final");
+let question = document.getElementById("question");
+
+no.addEventListener("mouseover", function() {
+    no.style.position = "absolute";
+    no.style.left = Math.random() * 80 + "%";
+    no.style.top = Math.random() * 80 + "%";
+});
+
+yes.addEventListener("click", function() {
+    question.style.display = "none";
+    yes.style.display = "none";
+    no.style.display = "none";
+    final.style.display = "block";
+    startHearts();
+    startFireworks();
+});
+
+function startHearts() {
+    setInterval(() => {
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerText = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.bottom = "0";
+        heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 5000);
+    }, 200);
+}
+
+let canvas = document.getElementById("fireworks");
+let ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function startFireworks() {
+    setInterval(() => {
+        for (let i = 0; i < 50; i++) {
+            particles.push({
+                x: canvas.width / 2,
+                y: canvas.height / 2,
+                angle: Math.random() * 2 * Math.PI,
+                speed: Math.random() * 5 + 2,
+                radius: 2
+            });
+        }
+    }, 800);
+    animate();
+}
+
+function animate() {
+    ctx.fillStyle = "rgba(0,0,0,0.2)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p, index) => {
+        p.x += Math.cos(p.angle) * p.speed;
+        p.y += Math.sin(p.angle) * p.speed;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "white";
+        ctx.fill();
+        if (p.x < 0 || p.x > canvas.width || p.y < 0 || p.y > canvas.height) {
+            particles.splice(index, 1);
+        }
+    });
+    requestAnimationFrame(animate);
+}
+</script>
+
+</body>
+</html>
